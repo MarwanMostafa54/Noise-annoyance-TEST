@@ -1,0 +1,55 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* simple page defaults */
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  @apply antialiased;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* a utility gradient background that uses the custom colors */
+.app-gradient {
+  background-image: linear-gradient(135deg, theme('colors.brand-start'), theme('colors.brand-mid'), theme('colors.brand-end'));
+}
+
+/* slider styling */
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 10px;
+  background: linear-gradient(90deg, #60a5fa, #34d399);
+  border-radius: 9999px;
+  outline: none;
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  background: white;
+  border: 3px solid #2563eb;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+.gradient-btn {
+  background: linear-gradient(135deg, #60a5fa, #34d399);
+}
+
+/* Print styles */
+@media print {
+  /* hide interactive elements */
+  .no-print { display: none !important; }
+
+  /* make the report content use full width and black text */
+  body { background: white !important; }
+  .min-h-screen { min-height: auto !important; }
+  .bg-white { background: white !important; }
+  .shadow-lg { box-shadow: none !important; }
+  .rounded-2xl { border-radius: 0 !important; }
+  .text-slate-600, .text-gray-700, .text-slate-700 { color: #000 !important; }
+  a { color: #000 !important; text-decoration: none; }
+}
