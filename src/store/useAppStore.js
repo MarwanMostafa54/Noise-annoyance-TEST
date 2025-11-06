@@ -54,10 +54,10 @@ const useAppStore = create((set, get) => ({
 
     // 3. Send the email via EmailJS
     try {
-      // !!! PASTE YOUR 3 KEYS FROM EMAILJS HERE !!!
-      const SERVICE_ID = "service_a3we77k";
-      const TEMPLATE_ID = "template_3yldkrn";
-      const PUBLIC_KEY = "G8fwX4LOLd7deIsjc";
+      // Use environment variables or fallback to hardcoded values
+      const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID || "service_a3we77k";
+      const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID || "template_3yldkrn";
+      const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || "G8fwX4LOLd7deIsjc";
 
       await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
       return true; // Success
