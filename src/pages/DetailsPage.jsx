@@ -23,12 +23,41 @@ const DetailsPage = () => {
 
   // Local state for tabs
   const [activeTab, setActiveTab] = useState('music');
+  const [loadingPreset, setLoadingPreset] = useState('')
+  const [loadError, setLoadError] = useState('')
   
-  // (These are just placeholders, you'd load real files)
-  const musicSamples = [
-    { name: 'Star Wars (sample)', file: 'sample-files/music1.mp3' },
-    { name: 'Cantina Band (sample)', file: 'sample-files/music2.mp3' },
-  ];
+  // presets in public/presets are accessible at /presets/... at runtime
+  const presetFolders = {
+    music: [
+      'beethoven 3rd symphony.mp4',
+      "Beethoven's 5th Symphony.mp4",
+    ],
+    'brain wave': [
+      'alpha.mp4',
+      'beta.mp4',
+      'theta.mp4',
+    ],
+    tones: [
+      'Delay Time Test Signal.mp4',
+      'Fast Pink Noise 1s.mp4',
+      'Fast Pink Noise 4s.mp4',
+      'Pink Noise Stereo On 10s, Off 10s.mp4',
+      'Pink Noise Stereo On 1s, Off 1s.mp4',
+      'Pink Noise Stereo On 2s, Off 2s.mp4',
+      'Pink Noise Stereo On 5s, Off 5s.mp4',
+      'Pink Noise Stereo.mp4',
+      'Pink Noise.mp4',
+      'Polarity Test Signal.mp4',
+      'Sine 1kHz Left Channel.mp4',
+      'Sine 1kHz Right Channel.mp4',
+      'Sine1 kHz.mp4',
+      'Stepped Sweep 20Hz - 20kHz, 3rd oct, 1s.mp4',
+      'Stepped Sweep 20Hz - 20kHz, 3rd oct, 3s.mp4',
+      'STIPA Speech Intelligibility ed5.mp4',
+      'White Noise Stereo.mp4',
+      'White Noise.mp4',
+    ]
+  }
   // Add more samples for brainwave, tones...
 
   const handleInputChange = (e) => {
@@ -163,15 +192,105 @@ const DetailsPage = () => {
           <div className="space-y-3">
             {activeTab === 'music' && (
               <>
-                <button className="w-full p-4 rounded-lg text-left text-gray-700 bg-white border border-gray-200 hover:bg-gray-100">Star Wars (sample)</button>
-                <button className="w-full p-4 rounded-lg text-left text-gray-700 bg-white border border-gray-200 hover:bg-gray-100">Cantina Band (sample)</button>
+                {presetFolders.music.map((f) => {
+                  const isSelected = selectedSound === f
+                  const isLoading = loadingPreset === f
+                  return (
+                    <button
+                      key={f}
+                      onClick={async () => {
+                        try {
+                          setLoadError('')
+                          setLoadingPreset(f)
+                          const url = `/presets/music/${encodeURIComponent(f)}`
+                          const ok = await loadAudio(url)
+                          if (ok) {
+                            setSelectedSound(f)
+                          } else {
+                            setLoadError(`Failed to load ${f}`)
+                          }
+                        } catch (err) {
+                          console.error(err)
+                          setLoadError(err?.message || 'Unknown error')
+                        } finally {
+                          setLoadingPreset('')
+                        }
+                      }}
+                      disabled={isLoading}
+                      className={`w-full p-4 rounded-lg text-left border border-gray-200 transition-colors mb-2 ${isSelected ? 'bg-blue-50 text-blue-700 border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-100'} ${isLoading ? 'opacity-70 cursor-wait' : ''}`}
+                    >
+                      {isLoading ? `Loading ${f}...` : f}
+                    </button>
+                  )
+                })}
+                {loadError && <p className="text-sm text-red-600 mt-2">{loadError}</p>}
+                {/* only show presets from public/presets */}
               </>
             )}
             {activeTab === 'brain wave' && (
-               <button className="w-full p-4 rounded-lg text-left text-gray-700 bg-white border border-gray-200 hover:bg-gray-100">Alpha Wave (sample)</button>
+               <>
+                 {presetFolders['brain wave'].map((f) => {
+                   const isSelected = selectedSound === f
+                   const isLoading = loadingPreset === f
+                   return (
+                     <button
+                       key={f}
+                       onClick={async () => {
+                         try {
+                           setLoadError('')
+                           setLoadingPreset(f)
+                           const url = `/presets/brainwaves/${encodeURIComponent(f)}`
+                           const ok = await loadAudio(url)
+                           if (ok) setSelectedSound(f)
+                           else setLoadError(`Failed to load ${f}`)
+                         } catch (err) {
+                           console.error(err)
+                           setLoadError(err?.message || 'Unknown error')
+                         } finally {
+                           setLoadingPreset('')
+                         }
+                       }}
+                       disabled={isLoading}
+                       className={`w-full p-4 rounded-lg text-left border border-gray-200 transition-colors mb-2 ${isSelected ? 'bg-blue-50 text-blue-700 border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-100'} ${isLoading ? 'opacity-70 cursor-wait' : ''}`}
+                     >
+                       {isLoading ? `Loading ${f}...` : f}
+                     </button>
+                   )
+                 })}
+               </>
             )}
             {activeTab === 'tones' && (
-               <button className="w-full p-4 rounded-lg text-left text-gray-700 bg-white border border-gray-200 hover:bg-gray-100">1000Hz Sine (sample)</button>
+               <>
+                 {presetFolders.tones.map((f) => {
+                   const isSelected = selectedSound === f
+                   const isLoading = loadingPreset === f
+                   return (
+                     <button
+                       key={f}
+                       onClick={async () => {
+                         try {
+                           setLoadError('')
+                           setLoadingPreset(f)
+                           const url = `/presets/tones/${encodeURIComponent(f)}`
+                           const ok = await loadAudio(url)
+                           if (ok) setSelectedSound(f)
+                           else setLoadError(`Failed to load ${f}`)
+                         } catch (err) {
+                           console.error(err)
+                           setLoadError(err?.message || 'Unknown error')
+                         } finally {
+                           setLoadingPreset('')
+                         }
+                       }}
+                       disabled={isLoading}
+                       className={`w-full p-4 rounded-lg text-left border border-gray-200 transition-colors mb-2 ${isSelected ? 'bg-blue-50 text-blue-700 border-blue-600' : 'bg-white text-gray-700 hover:bg-gray-100'} ${isLoading ? 'opacity-70 cursor-wait' : ''}`}
+                     >
+                       {isLoading ? `Loading ${f}...` : f}
+                     </button>
+                   )
+                 })}
+                 {loadError && <p className="text-sm text-red-600 mt-2">{loadError}</p>}
+               </>
             )}
             {activeTab === 'upload' && (
               <div>

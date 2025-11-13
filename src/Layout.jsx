@@ -1,6 +1,6 @@
 // Layout.jsx
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import useAppStore from './store/useAppStore'; // Adjust path if needed
 
 // Assume your logo image is here. Adjust path if different.
@@ -9,6 +9,8 @@ const APP_LOGO = '/assets/logo.jpg';
 const Layout = () => {
   const location = useLocation(); // To get the current path for conditional rendering
   const isVerified = useAppStore((state) => state.isVerified); // Use this to hide header on verification page
+  const navigate = useNavigate();
+  const retakeTest = useAppStore((state) => state.retakeTest);
 
   // Do not render the header/layout on the verification page or if not verified
   if (location.pathname === '/' && !isVerified) {
@@ -26,7 +28,27 @@ const Layout = () => {
             <p className="text-sm text-gray-600">Powered by Enosh Science Center</p>
           </div>
         </div>
-        {/* You could add navigation links or user info here later */}
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="py-2 px-3 rounded-md bg-white border border-gray-200 text-gray-700 hover:bg-gray-50"
+          >
+            Back
+          </button>
+          <button
+            onClick={async () => {
+              try {
+                await retakeTest()
+                navigate('/details')
+              } catch (e) {
+                console.error('retakeTest failed', e)
+              }
+            }}
+            className="py-2 px-3 rounded-md bg-red-500 text-white hover:bg-red-600"
+          >
+            Retake Test
+          </button>
+        </div>
       </header>
 
       {/* Main content area. Outlet renders the specific page content. */}
