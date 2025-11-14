@@ -84,9 +84,8 @@ const DetailsPage = () => {
   };
 
   return (
-    // 1. The Full-Screen Page Container (NO max-w)
-    // This container just centers its child
-    <div className="h-screen overflow-hidden bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-8">
+    // Use min-h so page can grow and scroll naturally; avoid vertical centering which prevents scroll
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex justify-center p-8">
       
       {/* 2. The Main Card (with max-w-7xl) - THIS IS THE KEY */}
       <div className="w-full max-w-7xl grid grid-cols-1 md:grid-cols-2 bg-white rounded-3xl shadow-2xl overflow-hidden mx-auto">
@@ -168,7 +167,7 @@ const DetailsPage = () => {
         </div>
         
         {/* 4. Right Column (Sound Select) */}
-        <div className="bg-gray-50 p-10 md:p-12">
+        <div className="bg-gray-50 p-10 md:p-12 flex flex-col w-full">
           <h2 className="text-3xl font-bold text-gray-800 mb-8">Select Sound</h2>
           
           {/* Tab Headers */}
@@ -189,7 +188,9 @@ const DetailsPage = () => {
           </div>
           
           {/* Tab Panels */}
-          <div className="space-y-3">
+          <div className="space-y-3 pb-6">
+            {/* Make the list scrollable without blocking the whole page */}
+            <div className="overflow-y-auto max-h-[60vh] pr-2">
             {activeTab === 'music' && (
               <>
                 {presetFolders.music.map((f) => {
@@ -326,6 +327,7 @@ const DetailsPage = () => {
                 )}
               </div>
             )}
+            </div>
           </div>
         </div>
       </div>
