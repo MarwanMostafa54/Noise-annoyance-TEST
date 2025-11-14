@@ -1,4 +1,11 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "git-lfs": true
+    }
+  }
+}
+{
   "rewrites": [
     {
       "source": "/(.*)",
